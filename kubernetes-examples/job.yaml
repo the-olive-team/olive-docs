@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: Job # note this is much like the previous example because a pod with restart policy = Never is similar to a job
+metadata:
+  name: hello
+spec:
+  template:
+    # This is the pod template
+    spec:
+      containers:
+        - name: hello
+          image: busybox:1.28
+          command: ['sh', '-c', 'echo "Hello, Kubernetes!" && sleep 30']
+          resources: # here we limit the resources the container can use to not overload the node it runs on
+            requests: # taken into account when scheduling
+              cpu: 50m # m = microcoores so 50m = 0.05 cpu. you can also specify like 1 which is a cpu
+              memory: 50Mi # 50 megabytes of memory for the container
+            limits: # container is not allowed to use more than the limit
+              cpu: 50m
+              memory: 50Mi
+      restartPolicy: Never

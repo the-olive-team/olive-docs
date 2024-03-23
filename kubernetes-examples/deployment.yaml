@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 1 # number of pods for the deployment
+  selector: # defines how the created ReplicaSet finds which Pods to manage
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels: # the pod labels
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          imagePullPolicy: Always # can be never or ifNotPresent
+          image: nginx:latest
+          ports:
+            - containerPort: 80 # the port to expose for this container (can have multiple)
+          resources: # can set resources on any container
+            limits:
+              memory: "128Mi"  # Maximum memory allowed
+              cpu: "100m"       # Maximum CPU allowed
+            requests:
+              memory: "128Mi"  # Initial memory request
+              cpu: "100m"       # Initial CPU request
+
+# once this is deployed to minikube with k apply -f deployment.yaml you can port forward to localhost to communicate with it
+# the following command will port forward port 80 in the cluster to 8081 locally. Visit localhost:8081 to view the page after forwarding.
+# k port-forward deployment/nginx-deployment 8081:80
