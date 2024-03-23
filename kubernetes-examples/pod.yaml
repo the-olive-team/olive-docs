@@ -1,0 +1,12 @@
+# most basic resource is a pod
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hello # pod name
+  namespace: default # this field is optional will default to "default"
+spec:
+  restartPolicy: Never # this can be never, onFailure or always
+  containers: # this can be a list of multiple containers
+    - name: hello # containers can have a name
+      image: busybox:1.28 # this is a public image however you can build a local one
+      command: ['sh', '-c', 'echo "Hello, Kubernetes!" && sleep 30'] # this is the command to run with the image
